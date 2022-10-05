@@ -109,7 +109,7 @@ const vemonStart = (session) => {
                 //Create session wss return "serverClose" case server for close
                 console.log('Session name: ', sessionUpdate);
             },{
-                headless: false,
+                //headless: false,
                 autoClose: 0,
                 useChrome: false,
                 chromiumVersion: '818858',
