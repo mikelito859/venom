@@ -111,6 +111,8 @@ const vemonStart = (session) => {
             },{
                 headless: false,
                 autoClose: 0,
+                useChrome: false,
+                chromiumVersion: '818858',
             }
         )
         .then((client) => {
