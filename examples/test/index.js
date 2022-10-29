@@ -5,10 +5,26 @@ const venom = require('../../dist');
 let channelStr = 'my-channel';
 
 let sessions = {
+    // otherland: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'otherland',//'atlc_session',
+    //     pusher: {
+    //         appId: '1491774',
+    //         key: 'a4f2cdb07d0f55f03bde',
+    //         secret: '7e97b35329ea18c129cb',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: false,
+    //     useChrome: true,
+    // },
     atlc: {
         initialized: false,
         client: null,
-        sessionName: 'sessionName',//'atlc_session',
+        sessionName: 'atlc2',//'atlc_session',
         pusher: {
             appId: '1477659',
             key: '198d42f2b4e9fd30cd5f',
@@ -18,6 +34,8 @@ let sessions = {
         },
         status: {},
         sent: [],
+        headless: true,
+        useChrome: false,
     },
     cte: {
         initialized: false,
@@ -32,6 +50,8 @@ let sessions = {
         },
         status: {},
         sent: [],
+        headless: true,
+        useChrome: false,
     },
 }
 
@@ -109,9 +129,9 @@ const vemonStart = (session) => {
                 //Create session wss return "serverClose" case server for close
                 console.log('Session name: ', sessionUpdate);
             },{
-                //headless: false,
+                headless: session.headless,//false,
+                useChrome: session.useChrome,//true,
                 autoClose: 0,
-                useChrome: false,
                 chromiumVersion: '818858',
             }
         )
