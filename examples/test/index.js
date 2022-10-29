@@ -24,7 +24,7 @@ let sessions = {
     atlc: {
         initialized: false,
         client: null,
-        sessionName: 'atlc2',//'atlc_session',
+        sessionName: 'sessionName',//'atlc_session',
         pusher: {
             appId: '1477659',
             key: '198d42f2b4e9fd30cd5f',
