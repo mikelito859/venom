@@ -41,7 +41,7 @@ let sessions = {
         initialized: false,
         client: null,
         sessionName: 'sessionName',//'atlc_session',
-        pusher: {
+        pusherData: {
             appId: '1477659',
             key: '198d42f2b4e9fd30cd5f',
             secret: 'f3b726b692eefc4f10ff',
@@ -57,7 +57,7 @@ let sessions = {
         initialized: false,
         client: null,
         sessionName: 'cte_session',
-        pusher: {
+        pusherData: {
             appId: '1477660',
             key: '2dc50b6ee1bf55cabc51',
             secret: '376c5326e1685e135a4d',
