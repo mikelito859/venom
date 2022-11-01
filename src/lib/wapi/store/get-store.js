@@ -18,7 +18,9 @@ export async function getStore(modules) {
     }
   }
 
+  console.log(neededObjects);
   let neededStore = neededObjects.find((needObj) => needObj.id === 'Store');
+  console.log(neededStore);
   window.Store = neededStore.foundedModule ? neededStore.foundedModule : {};
   neededObjects.splice(neededObjects.indexOf(neededStore), 1);
 
@@ -43,5 +45,6 @@ export async function getStore(modules) {
   Store.Chat._findAndParse = Store.BusinessProfile._findAndParse;
   Store.Chat._find = Store.BusinessProfile._find;
 
+  console.log(window.Store);
   return window.Store;
 }

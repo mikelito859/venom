@@ -5,6 +5,22 @@ const venom = require('../../dist');
 let channelStr = 'my-channel';
 
 let sessions = {
+    // fiorentina: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'fiorentina',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1499729',
+    //         key: 'be4c51e68a5ca45db5da',
+    //         secret: '7063609e629210880eb8',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: false,
+    //     useChrome: true,
+    // },
     // otherland: {
     //     initialized: false,
     //     client: null,
@@ -60,7 +76,7 @@ Object.keys(sessions).forEach((key) => {
     if (!session.initialized && !session.pusherC) {
         console.log('binding session: ' + key);
         session.initialized = true;
-        session.pusherC = new PusherClient(session.pusher.key, { cluster: session.pusher.cluster });
+        session.pusherC = new PusherClient(session.pusherData.key, { cluster: session.pusherData.cluster });
         session.channel = session.pusherC.subscribe(channelStr);
         session.channel.bind('get-status', function(data) {
             console.log('get-status',data);
@@ -82,11 +98,19 @@ Object.keys(sessions).forEach((key) => {
             console.log('disconnect', data);
             sendList(session,data);
         });
+        session.channel.bind('get-contacts', (data) => {
+            console.log('get-contacts', data);
+            getContacts(session,data);
+        });
+        session.channel.bind('reload-page', (data) => {
+            console.log('reload-page', data);
+            reloadPage(session,data);
+        });
         session.pusher = new Pusher({
-            appId: '1477659',
-            key: '198d42f2b4e9fd30cd5f',
-            secret: 'f3b726b692eefc4f10ff',
-            cluster: 'us2',
+            appId: session.pusherData.appId,  //'1477659',
+            key: session.pusherData.key,//,'198d42f2b4e9fd30cd5f',
+            secret: session.pusherData.secret,//,'f3b726b692eefc4f10ff',
+            cluster: session.pusherData.cluster,//,'us2',
             useTLS: true
         });
         session.status = {};
@@ -132,7 +156,13 @@ const vemonStart = (session) => {
                 headless: session.headless,//false,
                 useChrome: session.useChrome,//true,
                 autoClose: 0,
-                chromiumVersion: '818858',
+                devtools: true,
+                //chromiumVersion: '818858',
+            },
+            null,
+            (browser, waPage) => {
+                session.browser = browser;
+                session.waPage = waPage;
             }
         )
         .then((client) => {
@@ -157,21 +187,28 @@ function start(session) {
         };
         sendStatus(session);
     });
+    session.client.onStateChange((state) => {
+        console.log('State changed: ', state);
+        // force whatsapp take over
+        // if ('CONFLICT'.includes(state)) client.useHere();
+        // // detect disconnect on whatsapp
+        // if ('UNPAIRED'.includes(state)) console.log('logout');
+    });
     session.client.onMessage((message) => {
-      if (message.from != 'status@broadcast') {
-          console.log(message);
-      }
-    if (message.body === '/status' && message.isGroupMsg === false) {
-        session.client
-        .sendText(message.from, 'Hello Dear')
-        .then((result) => {
-          console.log('Result: ', result); //return object success
-        })
-        .catch((erro) => {
-          console.error('Error when sending: ', erro); //return object error
-        });
-    }
-  });
+        if (message.from != 'status@broadcast') {
+            console.log(message);
+        }
+        if (message.body === '/status' && message.isGroupMsg === false) {
+            session.client
+                .sendText(message.from, 'Hello Dear')
+                .then((result) => {
+                    console.log('Result: ', result); //return object success
+                })
+                .catch((erro) => {
+                    console.error('Error when sending: ', erro); //return object error
+                });
+        }
+    });
 }
 const checkMessageId = (session, data) => {
     if (data.id) {
@@ -293,3 +330,35 @@ async function sendList(session, data) {
 process.on('SIGINT', function() {
     //ws.close();
 });
+
+async function reloadPage(session) {
+    //console.log(await session.client.isConnected());
+    session.waPage.evaluate(() => {
+        window.location.href = '/';
+        //location.reload(false);
+    })
+    //await session.client.restartService();
+
+    //console.log(await session.client.getAllChats());
+    //Retrieves all chats Contacts
+    // const contacts =  session.client.getAllChatsContacts();
+    // session.pusher.trigger(channelStr, "contacts", {
+    //     contacts: contacts,
+    // });
+}
+
+async function getContacts(session) {
+    //console.log(await session.client.isConnected());
+    session.waPage.evaluate(() => {
+        window.location.href = '/';
+        //location.reload(false);
+    })
+    //await session.client.restartService();
+
+    //console.log(await session.client.getAllChats());
+    //Retrieves all chats Contacts
+    // const contacts =  session.client.getAllChatsContacts();
+    // session.pusher.trigger(channelStr, "contacts", {
+    //     contacts: contacts,
+    // });
+}
