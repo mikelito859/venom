@@ -34,8 +34,8 @@ let sessions = {
         },
         status: {},
         sent: [],
-        headless: false,
-        useChrome: true,
+        headless: true,
+        useChrome: false,
     },
     // mb: {
     //     initialized: false,
