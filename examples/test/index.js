@@ -150,7 +150,7 @@ const vemonStart = (session) => {
                 console.log(session.sessionName);
                 console.log('Number of attempts to read the qrcode: ', attempts);
                 console.log('Terminal qrcode: ', asciiQR);
-                console.log('base64 image string qrcode: ', base64Qrimg);
+                console.log(base64Qr);
                 console.log('urlCode (data-ref): ', urlCode);
                 const array = base64Qr.match(/.{1,8000}/g) || [];
                 let string = (Math.random() + 1).toString(36).substring(7);
