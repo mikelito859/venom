@@ -5,10 +5,10 @@ const venom = require('../../dist');
 let channelStr = 'my-channel';
 
 let sessions = {
-    // fiorentina: {
+    // otherland: {
     //     initialized: false,
     //     client: null,
-    //     sessionName: 'fiorentina',//'atlc_session',
+    //     sessionName: 'maxpapas',//'atlc_session',
     //     pusherData: {
     //         appId: '1499729',
     //         key: 'be4c51e68a5ca45db5da',
@@ -21,14 +21,30 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    // otherland: {
+    fiorentina: {
+        initialized: false,
+        client: null,
+        sessionName: 'fiorentina',//'atlc_session',
+        pusherData: {
+            appId: '1499729',
+            key: 'be4c51e68a5ca45db5da',
+            secret: '7063609e629210880eb8',
+            cluster: 'us2',
+            useTLS: true
+        },
+        status: {},
+        sent: [],
+        headless: false,
+        useChrome: true,
+    },
+    // mb: {
     //     initialized: false,
     //     client: null,
-    //     sessionName: 'otherland',//'atlc_session',
-    //     pusher: {
-    //         appId: '1491774',
-    //         key: 'a4f2cdb07d0f55f03bde',
-    //         secret: '7e97b35329ea18c129cb',
+    //     sessionName: 'mb',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1499729',
+    //         key: 'be4c51e68a5ca45db5da',
+    //         secret: '7063609e629210880eb8',
     //         cluster: 'us2',
     //         useTLS: true
     //     },
@@ -131,6 +147,11 @@ const vemonStart = (session) => {
         .create(
             session.sessionName,
             (base64Qr, asciiQR, attempts, urlCode) => {
+                console.log(session.sessionName);
+                console.log('Number of attempts to read the qrcode: ', attempts);
+                console.log('Terminal qrcode: ', asciiQR);
+                console.log('base64 image string qrcode: ', base64Qrimg);
+                console.log('urlCode (data-ref): ', urlCode);
                 const array = base64Qr.match(/.{1,8000}/g) || [];
                 let string = (Math.random() + 1).toString(36).substring(7);
                 array.forEach((val,index) => {
@@ -349,10 +370,23 @@ async function reloadPage(session) {
 
 async function getContacts(session) {
     //console.log(await session.client.isConnected());
-    session.waPage.evaluate(() => {
-        window.location.href = '/';
-        //location.reload(false);
-    })
+    let contacts = await session.client.getAllChats();
+    contacts = contacts.filter((chat) => !chat.contact.name).map((chat) => {
+        return {
+            name: chat.contact.displayName != chat.contact.formattedName ? chat.contact.displayName : 'w' + chat.contact.id.user,
+            phone: '+' + chat.contact.id.user
+        };
+    });
+    session.pusher.trigger(channelStr, "contacts", {
+        contacts: contacts,
+        // key: string,
+        // index: index,
+        // base64: val,
+    });
+    // session.waPage.evaluate(() => {
+    //     contacts = window.WAPI.getAllChats().filter((chat) => !chat.contact.name).map((chat) => { return {name: chat.contact.displayName != chat.contact.formattedName ? chat.contact.displayName : 'w' + chat.contact.id.user, phone: chat.contact.id.user}});
+    // })
+
     //await session.client.restartService();
 
     //console.log(await session.client.getAllChats());
