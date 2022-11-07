@@ -72,7 +72,7 @@ let sessions = {
     cte: {
         initialized: false,
         client: null,
-        sessionName: 'cte_session',
+        sessionName: 'cte_session2',
         pusherData: {
             appId: '1477660',
             key: '2dc50b6ee1bf55cabc51',
