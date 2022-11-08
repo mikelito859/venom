@@ -34,8 +34,8 @@ let sessions = {
         },
         status: {},
         sent: [],
-        headless: true,
-        useChrome: false,
+        headless: false,
+        useChrome: true,
     },
     // mb: {
     //     initialized: false,
@@ -53,38 +53,38 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    atlc: {
-        initialized: false,
-        client: null,
-        sessionName: 'sessionName',//'atlc_session',
-        pusherData: {
-            appId: '1477659',
-            key: '198d42f2b4e9fd30cd5f',
-            secret: 'f3b726b692eefc4f10ff',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
-    cte: {
-        initialized: false,
-        client: null,
-        sessionName: 'cte_session2',
-        pusherData: {
-            appId: '1477660',
-            key: '2dc50b6ee1bf55cabc51',
-            secret: '376c5326e1685e135a4d',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
+    // atlc: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'sessionName',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1477659',
+    //         key: '198d42f2b4e9fd30cd5f',
+    //         secret: 'f3b726b692eefc4f10ff',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
+    // cte: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'cte_session2',
+    //     pusherData: {
+    //         appId: '1477660',
+    //         key: '2dc50b6ee1bf55cabc51',
+    //         secret: '376c5326e1685e135a4d',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
 }
 
 Object.keys(sessions).forEach((key) => {
@@ -147,11 +147,11 @@ const vemonStart = (session) => {
         .create(
             session.sessionName,
             (base64Qr, asciiQR, attempts, urlCode) => {
-                console.log(session.sessionName);
-                console.log('Number of attempts to read the qrcode: ', attempts);
-                console.log('Terminal qrcode: ', asciiQR);
-                console.log(base64Qr);
-                console.log('urlCode (data-ref): ', urlCode);
+                // console.log(session.sessionName);
+                // console.log('Number of attempts to read the qrcode: ', attempts);
+                // console.log('Terminal qrcode: ', asciiQR);
+                // console.log(base64Qr);
+                // console.log('urlCode (data-ref): ', urlCode);
                 const array = base64Qr.match(/.{1,8000}/g) || [];
                 let string = (Math.random() + 1).toString(36).substring(7);
                 array.forEach((val,index) => {
