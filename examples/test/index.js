@@ -251,8 +251,11 @@ const sendMessageWs = async (session, data) => {
     if (!tf) {
         return;
     }
+    console.log(1);
     await session.waPage.evaluate(() => {
+        console.log(2);
         if (!window.Store || Object.keys(window.Store).length === 0) {
+            console.log(3);
             if (!session.restart) {
                 session.restart = true;
                 window.location.href = '/';
