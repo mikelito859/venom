@@ -21,22 +21,22 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    fiorentina: {
-        initialized: false,
-        client: null,
-        sessionName: 'fiorentina',//'atlc_session',
-        pusherData: {
-            appId: '1499729',
-            key: 'be4c51e68a5ca45db5da',
-            secret: '7063609e629210880eb8',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: false,
-        useChrome: true,
-    },
+    // fiorentina: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'fiorentina',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1499729',
+    //         key: 'be4c51e68a5ca45db5da',
+    //         secret: '7063609e629210880eb8',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: false,
+    //     useChrome: true,
+    // },
     // mb: {
     //     initialized: false,
     //     client: null,
@@ -53,38 +53,38 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    // atlc: {
-    //     initialized: false,
-    //     client: null,
-    //     sessionName: 'sessionName',//'atlc_session',
-    //     pusherData: {
-    //         appId: '1477659',
-    //         key: '198d42f2b4e9fd30cd5f',
-    //         secret: 'f3b726b692eefc4f10ff',
-    //         cluster: 'us2',
-    //         useTLS: true
-    //     },
-    //     status: {},
-    //     sent: [],
-    //     headless: true,
-    //     useChrome: false,
-    // },
-    // cte: {
-    //     initialized: false,
-    //     client: null,
-    //     sessionName: 'cte_session2',
-    //     pusherData: {
-    //         appId: '1477660',
-    //         key: '2dc50b6ee1bf55cabc51',
-    //         secret: '376c5326e1685e135a4d',
-    //         cluster: 'us2',
-    //         useTLS: true
-    //     },
-    //     status: {},
-    //     sent: [],
-    //     headless: true,
-    //     useChrome: false,
-    // },
+    atlc: {
+        initialized: false,
+        client: null,
+        sessionName: 'sessionName',//'atlc_session',
+        pusherData: {
+            appId: '1477659',
+            key: '198d42f2b4e9fd30cd5f',
+            secret: 'f3b726b692eefc4f10ff',
+            cluster: 'us2',
+            useTLS: true
+        },
+        status: {},
+        sent: [],
+        headless: true,
+        useChrome: false,
+    },
+    cte: {
+        initialized: false,
+        client: null,
+        sessionName: 'cte_session2',
+        pusherData: {
+            appId: '1477660',
+            key: '2dc50b6ee1bf55cabc51',
+            secret: '376c5326e1685e135a4d',
+            cluster: 'us2',
+            useTLS: true
+        },
+        status: {},
+        sent: [],
+        headless: true,
+        useChrome: false,
+    },
 }
 
 Object.keys(sessions).forEach((key) => {
