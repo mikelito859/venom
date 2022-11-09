@@ -259,7 +259,7 @@ const sendMessageWs = async (session, data) => {
             }
             data.tries = (data.tries || 0) + 1;
 
-            setTimeout(() => session.sendMessageWs(session,data), 30000);
+            setTimeout(() => sendMessageWs(session,data), 30000);
             tf = false;
         } else {
             session.restart = false;
