@@ -21,22 +21,22 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    // fiorentina: {
-    //     initialized: false,
-    //     client: null,
-    //     sessionName: 'fiorentina',//'atlc_session',
-    //     pusherData: {
-    //         appId: '1499729',
-    //         key: 'be4c51e68a5ca45db5da',
-    //         secret: '7063609e629210880eb8',
-    //         cluster: 'us2',
-    //         useTLS: true
-    //     },
-    //     status: {},
-    //     sent: [],
-    //     headless: false,
-    //     useChrome: true,
-    // },
+    fiorentina: {
+        initialized: false,
+        client: null,
+        sessionName: 'fiorentina',//'atlc_session',
+        pusherData: {
+            appId: '1499729',
+            key: 'be4c51e68a5ca45db5da',
+            secret: '7063609e629210880eb8',
+            cluster: 'us2',
+            useTLS: true
+        },
+        status: {},
+        sent: [],
+        headless: false,
+        useChrome: true,
+    },
     // mb: {
     //     initialized: false,
     //     client: null,
@@ -53,38 +53,38 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    atlc: {
-        initialized: false,
-        client: null,
-        sessionName: 'sessionName',//'atlc_session',
-        pusherData: {
-            appId: '1477659',
-            key: '198d42f2b4e9fd30cd5f',
-            secret: 'f3b726b692eefc4f10ff',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
-    cte: {
-        initialized: false,
-        client: null,
-        sessionName: 'cte_session2',
-        pusherData: {
-            appId: '1477660',
-            key: '2dc50b6ee1bf55cabc51',
-            secret: '376c5326e1685e135a4d',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
+    // atlc: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'sessionName',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1477659',
+    //         key: '198d42f2b4e9fd30cd5f',
+    //         secret: 'f3b726b692eefc4f10ff',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
+    // cte: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'cte_session2',
+    //     pusherData: {
+    //         appId: '1477660',
+    //         key: '2dc50b6ee1bf55cabc51',
+    //         secret: '376c5326e1685e135a4d',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
 }
 
 Object.keys(sessions).forEach((key) => {
@@ -251,29 +251,28 @@ const sendMessageWs = async (session, data) => {
     if (!tf) {
         return;
     }
-    console.log(1);
-    await session.waPage.evaluate(() => {
-        console.log(2);
-        if (!window.Store || Object.keys(window.Store).length === 0) {
-            console.log(3);
-            if (!session.restart) {
-                session.restart = true;
-                window.location.href = '/';
+    let restarted = session.restarted;
+    let resp = await session
+        .waPage.evaluate(({restarted}) => {
+            if (window.WAPI) {
+                if (!window.Store || Object.keys(window.Store).length === 0) {
+                    if (!restarted) {
+                        window.location.href = '/';
+                    }
+                    return {
+                        tf: false,
+                        restarted: true,
+                    };
+                } else {
+                    return {tf: true, restarted: false};
+                }
             }
-            data.tries = (data.tries || 0) + 1;
-
-            setTimeout(() => sendMessageWs(session,data), 30000);
-            tf = false;
-        } else {
-            session.restart = false;
-            tf = true;
-        }
-    }).then(() => {
-
-    }).catch((e) => {
-        console.log(e);
-    })
-    if (!tf) {
+            return {tf: false};
+        }, {restarted});
+    console.log(resp);
+    session.restarted = resp.tf;
+    if (!resp.tf) {
+        setTimeout(() => sendMessageWs(session,data), 30000);
         return;
     }
     let phone = data.phone + '@c.us';
