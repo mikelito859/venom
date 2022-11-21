@@ -55,7 +55,7 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 import { Page } from 'puppeteer';
 import { CreateConfig } from '../../config/create-config';
 import { tokenSession } from '../../config/tokenSession.config';
-import { WhatsappProfile } from '../model';
+import { Chat, WhatsappProfile } from '../model';
 import { SenderLayer } from './sender.layer';
 import { checkValuesSender } from '../helpers/layers-interface';
 
@@ -200,6 +200,29 @@ export class RetrieverLayer extends SenderLayer {
    */
   public async getAllContacts() {
     return await this.page.evaluate(() => WAPI.getAllContacts());
+  }
+
+  /**
+   * Retrieve all groups
+   * @category Group
+   * @returns array of groups
+   */
+  public async getAllGroups(withNewMessagesOnly = false): Promise<Chat[]> {
+    return this.page.evaluate(
+      async ({ withNewMessagesOnly }) => {
+        const chats = await WPP.chat.list({
+          onlyGroups: true,
+          onlyWithUnreadMessage: withNewMessagesOnly
+        });
+
+        const groups = await Promise.all(
+          chats.map((c) => WPP.group.ensureGroup(c.id))
+        );
+
+        return groups.map((g) => WAPI._serializeChatObj(g));
+      },
+      { withNewMessagesOnly }
+    );
   }
 
   /**

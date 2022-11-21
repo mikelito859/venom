@@ -21,22 +21,22 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    // fiorentina: {
-    //     initialized: false,
-    //     client: null,
-    //     sessionName: 'fiorentina',//'atlc_session',
-    //     pusherData: {
-    //         appId: '1499729',
-    //         key: 'be4c51e68a5ca45db5da',
-    //         secret: '7063609e629210880eb8',
-    //         cluster: 'us2',
-    //         useTLS: true
-    //     },
-    //     status: {},
-    //     sent: [],
-    //     headless: false,
-    //     useChrome: true,
-    // },
+    fiorentina: {
+        initialized: false,
+        client: null,
+        sessionName: 'fiorentina',//'atlc_session',
+        pusherData: {
+            appId: '1499729',
+            key: 'be4c51e68a5ca45db5da',
+            secret: '7063609e629210880eb8',
+            cluster: 'us2',
+            useTLS: true
+        },
+        status: {},
+        sent: [],
+        headless: false,
+        useChrome: true,
+    },
     // mb: {
     //     initialized: false,
     //     client: null,
@@ -53,38 +53,38 @@ let sessions = {
     //     headless: false,
     //     useChrome: true,
     // },
-    atlc: {
-        initialized: false,
-        client: null,
-        sessionName: 'sessionName',//'atlc_session',
-        pusherData: {
-            appId: '1477659',
-            key: '198d42f2b4e9fd30cd5f',
-            secret: 'f3b726b692eefc4f10ff',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
-    cte: {
-        initialized: false,
-        client: null,
-        sessionName: 'cte_session2',
-        pusherData: {
-            appId: '1477660',
-            key: '2dc50b6ee1bf55cabc51',
-            secret: '376c5326e1685e135a4d',
-            cluster: 'us2',
-            useTLS: true
-        },
-        status: {},
-        sent: [],
-        headless: true,
-        useChrome: false,
-    },
+    // atlc: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'sessionName',//'atlc_session',
+    //     pusherData: {
+    //         appId: '1477659',
+    //         key: '198d42f2b4e9fd30cd5f',
+    //         secret: 'f3b726b692eefc4f10ff',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
+    // cte: {
+    //     initialized: false,
+    //     client: null,
+    //     sessionName: 'cte_session2',
+    //     pusherData: {
+    //         appId: '1477660',
+    //         key: '2dc50b6ee1bf55cabc51',
+    //         secret: '376c5326e1685e135a4d',
+    //         cluster: 'us2',
+    //         useTLS: true
+    //     },
+    //     status: {},
+    //     sent: [],
+    //     headless: true,
+    //     useChrome: false,
+    // },
 }
 
 Object.keys(sessions).forEach((key) => {
@@ -215,9 +215,16 @@ function start(session) {
         // // detect disconnect on whatsapp
         // if ('UNPAIRED'.includes(state)) console.log('logout');
     });
-    session.client.onMessage((message) => {
+    session.client.onAck(ack => {
+        // console.log('ack',ack);
+    });
+    session.client.onAnyMessage((message) => {
+        //message.isMyContact:
+        if ((!message.isGroupMsg  && !message.fromMe )) {
+            // console.log(message);
+        }
         if (message.from != 'status@broadcast') {
-            console.log(message);
+
         }
         if (message.body === '/status' && message.isGroupMsg === false) {
             session.client
@@ -395,6 +402,7 @@ async function getContacts(session) {
     //console.log(await session.client.isConnected());
     let contacts = await session.client.getAllChats();
     contacts = contacts.filter((chat) => !chat.contact.name).map((chat) => {
+        // message.isMyContact
         return {
             name: chat.contact.displayName != chat.contact.formattedName ? chat.contact.displayName : 'w' + chat.contact.id.user,
             phone: '+' + chat.contact.id.user

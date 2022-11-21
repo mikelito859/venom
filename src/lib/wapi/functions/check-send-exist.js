@@ -63,6 +63,23 @@ export function scope(id, erro, status, text = null, result = null) {
   };
   return object;
 }
+export function newId(result) {
+  const to = {
+    fromMe: true,
+    remote: {
+      server: result.id.split('@')[1].split('.us_')[0] + '.us',
+      user: result.id.split('@')[0].split('_')[1],
+      _serialized:
+        result.id.split('@')[0].split('_')[1] +
+        '@' +
+        result.id.split('@')[1].split('.us_')[0] +
+        '.us'
+    },
+    id: result.id.split('@')[1].split('.us_')[1],
+    _serialized: result.id
+  };
+  return to;
+}
 export async function getchatId(chatId) {
   if (chatId) {
     let to = await WAPI.getChatById(chatId);
