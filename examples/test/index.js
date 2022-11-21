@@ -68,6 +68,7 @@ let sessions = {
         sent: [],
         headless: true,
         useChrome: false,
+        autoRead: true,
     },
     cte: {
         initialized: false,
@@ -84,6 +85,7 @@ let sessions = {
         sent: [],
         headless: true,
         useChrome: false,
+        autoRead: true,
     },
 }
 
@@ -221,6 +223,11 @@ function start(session) {
     session.client.onAnyMessage((message) => {
         //message.isMyContact:
         if ((!message.isGroupMsg  && !message.fromMe )) {
+            if (session.autoRead) {
+                setTimeout(() => {
+                    session.client.sendSeen(message.from);
+                }, Math.random() * (60000 - 5000) + 5000);
+            }
             // console.log(message);
         }
         if (message.from != 'status@broadcast') {
